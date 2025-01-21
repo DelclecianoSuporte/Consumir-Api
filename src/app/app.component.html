@@ -1,60 +1,82 @@
-<h3>
-  Buscar Filme
-</h3>
+<mat-card>
+  <h3>Buscar Filme</h3>
 
-<div>
-  <input type="search" 
-    [(ngModel)]="valorBuscaFilme"
-    (keyup.enter)="buscarFilmePorId()" />
-</div>
+  <mat-form-field appearance="fill" class="customiza-card">
+    <mat-label>Digite o título do filme</mat-label>
+    <input matInput type="search" [(ngModel)]="valorBuscaFilme" (keyup)="buscarFilmes()" />
+  </mat-form-field>
 
-<p>
-  Filme Encontrado: {{ (filmeEncontrado$ | async)?.titulo}}
-</p>
+  <ul>
+    <li *ngFor="let filme of filmesEncontrados">
+      {{ filme.titulo }}
+    </li>
+  </ul>
+</mat-card>
 
-<h3>
-  Adicionar Pessoa
-</h3>
+<mat-card>
+  <h3>Adicionar Filme</h3>
 
-<div>
-  <input type="text"  
-    [(ngModel)]="tituloFilme" />
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Título</mat-label>
+    <input matInput type="text" [(ngModel)]="tituloFilme" />
+  </mat-form-field>
 
-  <input type="text"  
-  [(ngModel)]="generoFilme" />
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Gênero</mat-label>
+    <input matInput type="text" [(ngModel)]="generoFilme" />
+  </mat-form-field>
 
-  <input type="number"  
-  [(ngModel)]="duracaoFilme" />
-</div>
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Duração (minutos)</mat-label>
+    <input matInput type="number" [(ngModel)]="duracaoFilme" />
+  </mat-form-field>
 
-<button (click)="adicionarFilme()">Cadastrar Filme</button>
+  <div class="botao-container">
+    <button mat-raised-button color="primary" class="botao-custom" (click)="adicionarFilme()">Cadastrar Filme</button>
+  </div>
+  <!-- <button mat-raised-button color="primary" (click)="adicionarFilme()">Cadastrar Filme</button> -->
+</mat-card>
 
-<ul>
-  <li *ngFor="let filme of filmesComId$ | async">
-    <strong>{{ filme.titulo }}</strong> - {{ filme.genero }} - {{ filme.duracao }} min
-    <button (click)="preencherCamposParaAtualizacao(filme)">Editar</button>
-    <button (click)="excluirFilme(filme.id)">Excluir</button>
-  </li>
-</ul>
+<mat-card>
+  <h3>Filmes Cadastrados</h3>
 
-<h3>
-  Atualizar Filme
-</h3>
+  <ul>
+    <li *ngFor="let filme of filmesComId$ | async">
+      <strong>{{ filme.titulo }}</strong> - {{ filme.genero }} - {{ filme.duracao }} min
 
-<div>
-  <input type="text"  
-    [(ngModel)]="tituloAtualizarFilme" />
+      <button mat-button class="editar-botao" (click)="preencherCamposParaAtualizacao(filme)">
+        <mat-icon>edit</mat-icon> Editar
+      </button>
+      
+      <button mat-button class="excluir-botao" (click)="excluirFilme(filme.id)">
+        <mat-icon>delete</mat-icon> Excluir
+      </button>
+      
+    </li>
+  </ul>
+</mat-card>
 
-  <input type="text"  
-  [(ngModel)]="generoAtualizarFilme" />
+<mat-card>
+  <h3>Atualizar Filme</h3>
 
-  <input type="number"  
-  [(ngModel)]="duracaoAtualizarFilme" />
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Título</mat-label>
+    <input matInput type="text" [(ngModel)]="tituloAtualizarFilme" />
+  </mat-form-field>
 
-  <input type="hidden"  
-  [(ngModel)]="idFilmeParaAtualizar" />
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Gênero</mat-label>
+    <input matInput type="text" [(ngModel)]="generoAtualizarFilme" />
+  </mat-form-field>
 
-  <p>Valor do ID: {{ idFilmeParaAtualizar }}</p>
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Duração (minutos)</mat-label>
+    <input matInput type="number" [(ngModel)]="duracaoAtualizarFilme" />
+  </mat-form-field>
 
-  <button (click)="atualizarFilme()" [disabled]="!idFilmeParaAtualizar">Salvar Alterações</button>
-</div>
+  <div class="botao-container">
+    <button mat-raised-button color="primary" class="botao-custom" (click)="atualizarFilme()" [disabled]="!idFilmeParaAtualizar">
+      Salvar Alterações
+    </button>
+  </div>
+</mat-card>

@@ -1,1 +1,65 @@
-/* You can add global styles to this file, and also import other style files */
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.customiza-card{
+    width: 300px;
+}
+  
+mat-card {
+    margin: 16px;
+    padding: 16px;
+}
+
+.botao-container {
+    display: flex;
+    justify-content: center;
+}
+  
+.botao-custom {
+    width: 300px; 
+    background-color: #1e88e5;
+    color: white;
+    font-size: 14px;
+    padding: 8px 16px;
+    border-radius: 4px;
+    text-align: center;
+}
+
+.botao-custom:hover {
+    background-color: #1565c0;
+}
+
+
+.editar-botao {
+    background-color: lightblue;
+    color: darkblue;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    display: inline-flex;
+    align-items: center;
+    font-size: 16px;
+    cursor: pointer;
+    margin-right: 10px; 
+    margin-left: 10px; 
+}
+  
+.excluir-botao {
+    background-color: lightcoral;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    display: inline-flex;
+    align-items: center;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.editar-botao:hover{
+    background-color: #0073e6;
+}
+  
+.excluir-botao:hover {
+    background-color: #cc0000;
+}

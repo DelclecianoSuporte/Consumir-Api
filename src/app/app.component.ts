@@ -1,14 +1,17 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, inject, OnInit } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
 import { Filme, FilmeComId } from './models/filme';
 import { CommonModule } from '@angular/common';
-import { map, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { FormsModule } from '@angular/forms';
+import { MatCardModule } from '@angular/material/card';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-root',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, MatCardModule, MatInputModule, MatFormFieldModule, MatIconModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
@@ -22,7 +25,7 @@ export class AppComponent implements OnInit{
   filmes$?: Observable<Filme[]>;
 
   //Buscar Filme
-  filmeEncontrado$?: Observable<Filme>;
+  filmesEncontrados: Filme[] = [];
   valorBuscaFilme = '';
 
   //Adicionar Filme
@@ -31,8 +34,6 @@ export class AppComponent implements OnInit{
   duracaoFilme = 0
 
   //Atualizar um Filme
-
-  // Para lidar com filmes com o id (para edição, etc.)
   filmesComId$?: Observable<FilmeComId[]>;
   
   tituloAtualizarFilme = '';
@@ -41,8 +42,8 @@ export class AppComponent implements OnInit{
   idFilmeParaAtualizar?: number;
 
   preencherCamposParaAtualizacao(filme: FilmeComId) {
-    this.idFilmeParaAtualizar = filme.id; // Armazena o ID do filme
-    console.log('ID do filme para atualizar:', this.idFilmeParaAtualizar); // Verifique o valor aqui
+    this.idFilmeParaAtualizar = filme.id;
+    console.log('ID do filme para atualizar:', this.idFilmeParaAtualizar);
     this.tituloAtualizarFilme = filme.titulo;
     this.generoAtualizarFilme = filme.genero;
     this.duracaoAtualizarFilme = filme.duracao;
@@ -61,12 +62,26 @@ export class AppComponent implements OnInit{
     this.filmesComId$ = this.http.get<FilmeComId[]>(`${this.url}/filme`);
   }
   
-  buscarFilmePorId() {
-    if(!this.valorBuscaFilme){
-      return;
+  buscarFilmes() {
+    if (!this.valorBuscaFilme.trim()) { 
+      this.filmesEncontrados = []; 
+      return; 
     }
-    this.filmeEncontrado$ = this.http.get<Filme>(`${this.url}/filme/${this.valorBuscaFilme}`)
+  
+    this.http.get<Filme[]>(`${this.url}/filme/buscar/${this.valorBuscaFilme}`).subscribe({
+      next: (filmes) => { 
+        this.filmesEncontrados = filmes; 
+      },
+      error: (error) => {
+        if (error.status === 404) {
+          this.filmesEncontrados = [];
+        } else {
+          console.error('Erro ao buscar filmes:', error);
+        }
+      }
+    });
   }
+  
 
   adicionarFilme() {
     if(!this.tituloFilme && !this.generoFilme && this.duracaoFilme === 0){
@@ -84,7 +99,6 @@ export class AppComponent implements OnInit{
         next: (novoFilme) => {
           console.log('Filme cadastrado com sucesso:', novoFilme);
   
-          // Chama o método obterFilmes para atualizar a lista
           this.obterFilmes();
   
           // Limpa os campos
@@ -101,7 +115,7 @@ export class AppComponent implements OnInit{
   atualizarFilme() {
     if (this.idFilmeParaAtualizar !== undefined) { 
       const atualizarFilme: FilmeComId = {
-        id: this.idFilmeParaAtualizar,  // Este ID já está na URL
+        id: this.idFilmeParaAtualizar, 
         titulo: this.tituloAtualizarFilme,
         genero: this.generoAtualizarFilme,
         duracao: this.duracaoAtualizarFilme
@@ -126,7 +140,6 @@ export class AppComponent implements OnInit{
   }
 
   excluirFilme(id: number): void {
-    // Faz a requisição DELETE para excluir o filme
     this.http.delete(`${this.url}/filme/${id}`).subscribe({
       next: () => {
         console.log('Filme excluído com sucesso');
@@ -142,3 +155,6 @@ export class AppComponent implements OnInit{
   
 
 }
+
+
+  //filmeEncontrado$?: Observable<Filme>;
