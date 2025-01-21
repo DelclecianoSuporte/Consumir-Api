@@ -28,7 +28,7 @@
 
   <mat-form-field appearance="fill" class="full-width">
     <mat-label>Duração (minutos)</mat-label>
-    <input matInput type="number" [(ngModel)]="duracaoFilme" />
+    <input matInput type="number" [(ngModel)]="duracaoFilme" min="0" />
   </mat-form-field>
 
   <div class="botao-container">
@@ -44,17 +44,19 @@
     <li *ngFor="let filme of filmesComId$ | async">
       <strong>{{ filme.titulo }}</strong> - {{ filme.genero }} - {{ filme.duracao }} min
 
-      <button mat-button class="editar-botao" (click)="preencherCamposParaAtualizacao(filme)">
-        <mat-icon>edit</mat-icon> Editar
-      </button>
-      
-      <button mat-button class="excluir-botao" (click)="excluirFilme(filme.id)">
-        <mat-icon>delete</mat-icon> Excluir
-      </button>
-      
+      <div class="button-container">
+        <button mat-button class="editar-botao" (click)="preencherCamposParaAtualizacao(filme)">
+          <mat-icon>edit</mat-icon> Editar
+        </button>
+        
+        <button mat-button class="excluir-botao" (click)="excluirFilme(filme.id)">
+          <mat-icon>delete</mat-icon> Excluir
+        </button>
+      </div>
     </li>
   </ul>
 </mat-card>
+
 
 <mat-card>
   <h3>Atualizar Filme</h3>
@@ -71,7 +73,7 @@
 
   <mat-form-field appearance="fill" class="full-width">
     <mat-label>Duração (minutos)</mat-label>
-    <input matInput type="number" [(ngModel)]="duracaoAtualizarFilme" />
+    <input matInput type="number" [(ngModel)]="duracaoAtualizarFilme" min="0" />
   </mat-form-field>
 
   <div class="botao-container">

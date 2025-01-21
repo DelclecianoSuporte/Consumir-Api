@@ -34,7 +34,7 @@ export class AppComponent implements OnInit{
   duracaoFilme = 0
 
   //Atualizar um Filme
-  filmesComId$?: Observable<FilmeComId[]>;
+  filmesComId$?: Observable<FilmeComId[]> | undefined;
   
   tituloAtualizarFilme = '';
   generoAtualizarFilme = '';
@@ -82,9 +82,37 @@ export class AppComponent implements OnInit{
     });
   }
   
+  // adicionarFilme() {
+  //   if(!this.tituloFilme && !this.generoFilme && this.duracaoFilme === 0){
+  //     return;
+  //   }
+
+  //   const criarFilme: Filme = {
+  //     titulo: this.tituloFilme,
+  //     genero: this.generoFilme,
+  //     duracao: this.duracaoFilme
+  //   };
+  
+  //   this.http.post<Filme>(`${this.url}/filme`, criarFilme)
+  //     .subscribe({
+  //       next: (novoFilme) => {
+  //         console.log('Filme cadastrado com sucesso:', novoFilme);
+  
+  //         this.obterFilmes();
+  
+  //         // Limpa os campos
+  //         this.tituloFilme = '';
+  //         this.generoFilme = '';
+  //         this.duracaoFilme = 0;
+  //       },
+  //       error: (erro) => {
+  //         console.error('Erro ao cadastrar o filme:', erro);
+  //       }
+  //     });
+  // }
 
   adicionarFilme() {
-    if(!this.tituloFilme && !this.generoFilme && this.duracaoFilme === 0){
+    if (!this.tituloFilme || !this.generoFilme || this.duracaoFilme === 0) {
       return;
     }
 
@@ -93,24 +121,26 @@ export class AppComponent implements OnInit{
       genero: this.generoFilme,
       duracao: this.duracaoFilme
     };
-  
-    this.http.post<Filme>(`${this.url}/filme`, criarFilme)
-      .subscribe({
-        next: (novoFilme) => {
-          console.log('Filme cadastrado com sucesso:', novoFilme);
-  
-          this.obterFilmes();
-  
-          // Limpa os campos
-          this.tituloFilme = '';
-          this.generoFilme = '';
-          this.duracaoFilme = 0;
-        },
-        error: (erro) => {
-          console.error('Erro ao cadastrar o filme:', erro);
-        }
-      });
+
+    this.http.post<Filme>(`${this.url}/filme`, criarFilme).subscribe({
+      next: (novoFilme) => {
+        console.log('Filme cadastrado com sucesso:', novoFilme);
+
+        // Recarregar a página
+        window.location.reload();
+
+        // Limpa os campos
+        this.tituloFilme = '';
+        this.generoFilme = '';
+        this.duracaoFilme = 0;
+      },
+      error: (erro) => {
+        console.error('Erro ao cadastrar o filme:', erro);
+      }
+    });
   }
+
+
   
   atualizarFilme() {
     if (this.idFilmeParaAtualizar !== undefined) { 
